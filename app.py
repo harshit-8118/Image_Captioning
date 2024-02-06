@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 import os
-import numpy as numpy
-import image_caption_bot as caption_bot
+from image_caption_bot import predict_this_image
 
 app = Flask(__name__)
  
@@ -21,7 +20,7 @@ def submit():
         path = './static/{}'.format(f.filename)
         f.save(path)
 
-        caption = caption_bot.predict_this_image(path)
+        caption = predict_this_image(path)
         data = {
             'img_path': path,
             'caption': caption

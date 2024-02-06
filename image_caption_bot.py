@@ -4,8 +4,8 @@ Original file is located at
     https://colab.research.google.com/drive/1Qmd57M2pL_jawpbF2jgc89l3isPgegri
 """
 
-import numpy as np
 import pickle
+from numpy import expand_dims
 from keras.models import Model, load_model
 from keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.preprocessing import image
@@ -17,7 +17,7 @@ model_resnet = Model(model.input, model.layers[-2].output)
 def preprocess_img(img_path):
     img = image.load_img(img_path, target_size=(224, 224))
     img = image.img_to_array(img)
-    img = np.expand_dims(img, axis=0)
+    img = expand_dims(img, axis=0)
 
     img = preprocess_input(img)
     return img
@@ -47,7 +47,7 @@ def predict_caption(photo, max_len, word_2_idx, idx_2_word):
     for i in range(max_len):
         sequence = [word_2_idx[w] for w in in_text.split() if w in word_2_idx]
         sequence = pad_sequences([sequence], maxlen=max_len, padding='post')[0]
-        sequence = np.expand_dims(sequence, axis=0)
+        sequence = expand_dims(sequence, axis=0)
         ypred = model.predict([photo, sequence])
         ypred = ypred.argmax(axis=-1)[0]
         word = idx_2_word[ypred]
